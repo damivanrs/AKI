@@ -31,7 +31,7 @@ public class PantallaBonos extends utiles.PanelPantalla implements MouseListener
 		
 		if(this.getMarco().isConectado()){
 			sms1=this.getMarco().getUsuario();
-			sms2="Bonos Feos";
+			sms2="Bonos";
 		}else{
 			sms1="Pantalla";
 			sms2="Bonos";
