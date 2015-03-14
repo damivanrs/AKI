@@ -2,6 +2,7 @@ package utiles;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.net.URL;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -50,6 +51,12 @@ public class JPanelFondo extends JPanel {
         fondoTapado = false;
         repaint();
     }
+    
+    public void setImagen(URL url) {
+    	imagen = new ImageIcon(url).getImage();
+        fondoTapado = false;
+        repaint();
+	}
  
     public void paint(Graphics g) {
     	setOpaque(fondoTapado);

@@ -8,6 +8,7 @@ public class ControladorPrincipal {
 	
 	private PantallaPrincipal pantalla;
 	private ControladorMarco marco;
+	Color sobre = new Color(0xFFBCFF);
 	
 	
 	public ControladorPrincipal(PantallaPrincipal pantallaPrincipal) {
@@ -20,12 +21,14 @@ public class ControladorPrincipal {
 	public void miPerfil() {
 		//marco.anadirPantalla(new p01Perfil.PantallaPerfil(marco));
 		marco.anadirPantalla(new p01PerfilTiendas.PantallaPerfilTiendas(marco));
+		relax();
 	}
 
 
 	public void buscarSorteos() {
 		// TODO Auto-generated method stub
 		marco.anadirPantalla(new p02MenuSorteos.PantallaMenuSorteos(marco));
+		relax();
 		//System.out.println("Buscar Sorteos");
 	}
 
@@ -34,29 +37,24 @@ public class ControladorPrincipal {
 		// TODO Auto-generated method stub
 		//System.out.println("Mis Sorteos");
 		marco.anadirPantalla(new p03Ayuda.PantallaAyuda(marco));
-	}
-
-
-	public void misTickets() {
-		// TODO Auto-generated method stub
-		System.out.println("Mis Tickets");
+		relax();
 	}
 
 
 	public void sobreMiPerfil() {
 		relax();
-		pantalla.lPerfil.setBackground(Color.LIGHT_GRAY);
+		pantalla.pPerfil.setBackground(sobre);
 	}
 
 	public void sobreBuscarSorteos() {
 		relax();
-		pantalla.lSorteos.setBackground(Color.LIGHT_GRAY);
+		pantalla.pSorteos.setBackground(sobre);
 	}
 
 
 	public void sobreMisSorteos() {
 		relax();
-		pantalla.lAyuda.setBackground(Color.LIGHT_GRAY);
+		pantalla.pAyuda.setBackground(sobre);
 	}
 
 
@@ -68,9 +66,9 @@ public class ControladorPrincipal {
 
 
 	public void relax() {
-		pantalla.lPerfil.setBackground(Color.WHITE);
-		pantalla.lSorteos.setBackground(Color.WHITE);
-		pantalla.lAyuda.setBackground(Color.WHITE);
+		pantalla.pPerfil.setBackground(Color.WHITE);
+		pantalla.pSorteos.setBackground(Color.WHITE);
+		pantalla.pAyuda.setBackground(Color.WHITE);
 		//pantalla.lMisTickets.setBackground(Color.WHITE);
 	}
 

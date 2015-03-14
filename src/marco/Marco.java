@@ -87,7 +87,7 @@ public class Marco extends JFrame implements MouseListener{
 		sms1 = new JLabel("SMS 1");
 		pSupCentrisimo.add(sms1, BorderLayout.NORTH);
 		sms1.setForeground(Color.WHITE);
-		sms1.setFont(new Font("Gabrielle", Font.BOLD, 36));
+		sms1.setFont(new Font("Gabrielle", Font.BOLD, 25));
 		sms1.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		sms2 = new JLabel("SMS 2");

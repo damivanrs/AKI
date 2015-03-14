@@ -70,9 +70,11 @@ public class Conexion {
 		} catch (ClassNotFoundException e) {
 			error = "Error CNF [Conexion.conectar()]: " + e.toString();
 			estadoDeLaConexión = false;
+			System.out.println("Petaras por aqui");
 		} catch (SQLException e) {
 			error = "Error SQL [Conexion.conectar()]: " + e.toString();
 			estadoDeLaConexión = false;
+			System.out.println("petaras por alla");
 		}
 	}
 	

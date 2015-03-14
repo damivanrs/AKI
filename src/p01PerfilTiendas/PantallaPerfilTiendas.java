@@ -1,6 +1,8 @@
 package p01PerfilTiendas;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -13,27 +15,32 @@ import javax.swing.JTextField;
 
 
 
+
+
+
 import principal.ControladorPrincipal;
 import utiles.AKIButton;
 import utiles.AKIPanel;
 import utiles.JPanelFondo;
 import marco.ControladorMarco;
 
-public class PantallaPerfilTiendas extends utiles.PanelPantalla implements MouseListener {
+public class PantallaPerfilTiendas extends utiles.PanelPantalla implements MouseListener, KeyListener {
 	private ControladorPerfilTiendas c;
 	protected AKIButton bConectar = new AKIButton("Conectar", AKIButton.TipoBoton.BotonSimple);
 	protected AKIButton bCompraBonos = new AKIButton("Comprar Bonos", AKIButton.TipoBoton.BotonSimple);
 	protected AKIButton bPosicionNegocio = new AKIButton("Posición Negocio", AKIButton.TipoBoton.BotonSimple);
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textFieldPwd;
-	private JTextField textFieldNombreComercial;
-	private JTextField textFieldRazonSocial;
-	private JTextField textFieldContacto;
-	private JTextField textFieldDireccion;
-	private JTextField textFieldEmail;
-	private JTextField textFieldTelefono;
-	private JTextField textFieldActividadNegocio;
+	protected JTextField textFieldPwd;
+	protected JTextField textFieldNombreComercial;
+	protected JTextField textFieldRazonSocial;
+	protected JTextField textFieldContacto;
+	protected JTextField textFieldDireccion;
+	protected JTextField textFieldEmail;
+	protected JTextField textFieldTelefono;
+	protected JTextField textFieldActividadNegocio;
+	protected JLabel lblNombreUsuario = new JLabel("Nombre Comercial");
+	protected JLabel lblNewLabel = new JLabel("");
+	protected JLabel lblNumeroBonos = new JLabel("");
+	protected JPanelFondo pimgLocal = new JPanelFondo();
 
 	public PantallaPerfilTiendas(ControladorMarco controladorMarco) {
 		super(controladorMarco);
@@ -41,8 +48,9 @@ public class PantallaPerfilTiendas extends utiles.PanelPantalla implements Mouse
 		bSalir = "Volver Atras";
 		
 		if(this.getMarco().isConectado()){
-			sms1=this.getMarco().getUsuario();
+			sms1=this.getMarco().getUsuario();	
 			sms2="Perfil de Usuario";
+			//textFieldNombreComercial.setEnabled(false);
 		}else{
 			sms1="Pantalla";
 			sms2="Perfil de Usuario";
@@ -62,6 +70,7 @@ public class PantallaPerfilTiendas extends utiles.PanelPantalla implements Mouse
 		textFieldNombreComercial.setBounds(168, 19, 187, 22);
 		pSuperior.add(textFieldNombreComercial);
 		textFieldNombreComercial.setColumns(10);
+		textFieldNombreComercial.addKeyListener(this);
 		
 		JLabel lblRaznSocial = new JLabel("Raz\u00F3n Social");
 		lblRaznSocial.setBounds(168, 46, 131, 16);
@@ -108,7 +117,7 @@ public class PantallaPerfilTiendas extends utiles.PanelPantalla implements Mouse
 		pSuperior.add(textFieldTelefono);
 		textFieldTelefono.setColumns(10);
 		
-		JPanelFondo pimgLocal = new JPanelFondo("imgLocal.jpg");
+		
 		pimgLocal.setBounds(9, 9, 150, 150);
 		pSuperior.add(pimgLocal);
 		
@@ -120,7 +129,7 @@ public class PantallaPerfilTiendas extends utiles.PanelPantalla implements Mouse
 		lblBonosDisponibles2.setBounds(168, 280, 102, 16);
 		pSuperior.add(lblBonosDisponibles2);
 		
-		JLabel lblNumeroBonos = new JLabel("10");
+		
 		lblNumeroBonos.setBounds(299, 268, 56, 16);
 		pSuperior.add(lblNumeroBonos);
 		
@@ -167,7 +176,7 @@ public class PantallaPerfilTiendas extends utiles.PanelPantalla implements Mouse
 		lblUsuario.setBounds(12, 13, 56, 16);
 		pInferior.add(lblUsuario);
 		
-		JLabel lblNombreUsuario = new JLabel("Nombre Comercial");
+		
 		lblNombreUsuario.setBounds(87, 13, 100, 16);
 		pInferior.add(lblNombreUsuario);
 		
@@ -179,7 +188,7 @@ public class PantallaPerfilTiendas extends utiles.PanelPantalla implements Mouse
 		lblEstado.setBounds(206, 13, 47, 16);
 		pInferior.add(lblEstado);
 		
-		JLabel lblNewLabel = new JLabel("NombreEstado");
+		
 		lblNewLabel.setBounds(264, 13, 91, 16);
 		pInferior.add(lblNewLabel);
 		
@@ -195,14 +204,20 @@ public class PantallaPerfilTiendas extends utiles.PanelPantalla implements Mouse
 		pModificarGuardar.add(bConectar);
 		
 		bCompraBonos.addMouseListener(this);
+		bConectar.addMouseListener(this);
 		
 		c=new ControladorPerfilTiendas(this);
+		if(this.getMarco().isConectado()){
+			c.cargarDatos();
+		}
 	}
 
 	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		if (arg0.getSource().equals(bCompraBonos)){
 			c.bonos();
+		}else if (arg0.getSource().equals(bConectar)){
+			c.conectar();
 		}
 	}
 
@@ -224,6 +239,27 @@ public class PantallaPerfilTiendas extends utiles.PanelPantalla implements Mouse
 	public void mouseReleased(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public void keyPressed(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void keyReleased(KeyEvent arg0) {
+		if (arg0.getSource().equals(textFieldNombreComercial)){
+			lblNombreUsuario.setText(textFieldNombreComercial.getText());
+		}
+	}
+
+	public void keyTyped(KeyEvent arg0) {
+		if (arg0.getSource().equals(textFieldNombreComercial)){
+			lblNombreUsuario.setText(textFieldNombreComercial.getText());
+		}
+	}
+
+	public void cambiaSMS1(String text) {
+		sms1=text;
 	}
 
 }

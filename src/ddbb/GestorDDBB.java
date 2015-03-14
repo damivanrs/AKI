@@ -1,5 +1,7 @@
 package ddbb;
 
+import objetos.Patrocinador;
+
 public class GestorDDBB implements Runnable {
 	
 	private Conexion db;
@@ -87,5 +89,118 @@ public class GestorDDBB implements Runnable {
 		String orden = "insert into mensajes_usuarios(usuario, asunto, mensaje, mail) "
 				+ "values(("+idUsuario+"), '"+asunto+"', '"+mensaje+"', '"+correo+"')";
 		db.modifica(orden);
+	}
+
+	public Patrocinador getPatrocinador(String usuario) {
+		String consulta = "SELECT id, razon, contacto, direccion, email, telf, bonos, (SELECT estado FROM estados_patrocinadores WHERE id=p.estado), imagen FROM patrocinadores p WHERE '"+usuario+"' = nombre ";
+		if (db.consulta(consulta)){
+			String[] resultado =db.getDatosPrimeraFila();
+			Patrocinador pat = new Patrocinador();
+			pat.setRazonSocial(resultado[1]);
+			pat.setNombreContacto(resultado[2]);
+			pat.setDireccionContacto(resultado[3]);	
+			pat.setEmailContacto(resultado[4]);
+			pat.setTelfContacto(resultado[5]);
+			pat.setBonos(resultado[6]);
+			pat.setEstado(resultado[7]);
+			pat.setImagen(resultado[8]);
+			String consultaActividad = "SELECT tipo FROM tipos_de_negocio t, tipo_de_negocio_x_patrocinador x WHERE  x.patrocinador="+resultado[0]+" AND x.negocio=t.id";
+			if(db.consulta(consultaActividad)){
+				String[] resultadoActividad=db.getDatosColumna(0);
+				pat.setTipoComercio(resultadoActividad);
+			}
+			pat.setNombre(usuario);
+			return pat;
+		}
+		return null;
+	}
+
+	public Patrocinador getPatrocinador(String nombre, String pwd) {
+		// TODO Auto-generated method stub
+		String consulta = "SELECT id, razon, contacto, direccion, email, telf, bonos, (SELECT estado FROM estados_patrocinadores WHERE id=p.estado), imagen FROM patrocinadores p WHERE '"+nombre+"' = nombre AND '"+pwd+"'=pwd";
+		if (db.consulta(consulta)){
+			String[] resultado =db.getDatosPrimeraFila();
+			Patrocinador pat = new Patrocinador();
+			pat.setRazonSocial(resultado[1]);
+			pat.setNombreContacto(resultado[2]);
+			pat.setDireccionContacto(resultado[3]);	
+			pat.setEmailContacto(resultado[4]);
+			pat.setTelfContacto(resultado[5]);
+			pat.setBonos(resultado[6]);
+			pat.setEstado(resultado[7]);
+			pat.setImagen(resultado[8]);
+			String consultaActividad = "SELECT tipo FROM tipos_de_negocio t, tipo_de_negocio_x_patrocinador x WHERE  x.patrocinador="+resultado[0]+" AND x.negocio=t.id";
+			if(db.consulta(consultaActividad)){
+				String[] resultadoActividad=db.getDatosColumna(0);
+				pat.setTipoComercio(resultadoActividad);
+			}
+			pat.setNombre(nombre);
+			return pat;
+		}return null;
+	}
+
+	public boolean anadirPatrocinador(Patrocinador pat) {
+		String insertar = "INSERT INTO patrocinadores (nombre, razon, contacto, email, telf, direccion, estado, bonos, pwd) VALUES ("
+				+ "'"+pat.getNombre()+"', "
+						+ "'"+pat.getRazonSocial()+"', "
+						+ "'"+pat.getNombreContacto()+"', "
+						+ "'"+pat.getEmailContacto()+"', "
+						+ "'"+pat.getTelfContacto()+"', "
+						+ "'"+pat.getDireccionContacto()+"', "
+						+ "2, "// 2 equivale al id PENDIENTE en la BBDD
+						+ "0, "// inicialmente el numero de bonos al crear el usuario es 0
+						+ "'"+pat.getPwd()+"'"
+						+ ") ";
+		if(db.modifica(insertar)){
+			insertarActividadesPatrocinador(pat);
+			return true;
+		}
+		System.out.println(insertar);
+		System.out.println(db.getERROR());
+		return false;
+	}
+
+	private void insertarActividadesPatrocinador(Patrocinador pat) {
+		for(int i=0;i<pat.getTipoComercio().length;i++){
+			String insertarActividad = "INSERT IGNORE INTO tipos_de_negocio (tipo) VALUES ('"+pat.getTipoComercio()[i].toUpperCase()+"')";
+			if(db.modifica(insertarActividad)){
+				String insertarRelacion = "INSERT INTO tipo_de_negocio_x_patrocinador (patrocinador, negocio) VALUES ("
+						+ "(SELECT id FROM patrocinadores WHERE nombre='"+pat.getNombre()+"'), "
+						+ "(SELECT id FROM tipos_de_negocio WHERE tipo='"+pat.getTipoComercio()[i].toUpperCase()+"')"
+						+ ")";
+				db.modifica(insertarRelacion);
+			}
+		}
+	}
+
+	public boolean actualizarPatrocinador(Patrocinador pat) {
+		if(controlUsuario(pat.getNombre(), pat.getPwd())){
+			String actualizar = "UPDATE patrocinadores SET "
+					+ "razon='"+pat.getRazonSocial()+"', "
+					+ "contacto='"+pat.getNombreContacto()+"', "	
+					+ "email='"+pat.getEmailContacto()+"', "	
+					+ "telf='"+pat.getTelfContacto()+"', "	
+					+ "direccion='"+pat.getDireccionContacto()+"' "					
+					+ "WHERE nombre='"+pat.getNombre()+"' ";
+			if(db.modifica(actualizar)){
+				String eliminarRelacion = "DELETE FROM tipo_de_negocio_x_patrocinador WHERE "
+						+ "patrocinador=(SELECT id FROM patrocinadores WHERE nombre='"+pat.getNombre()+"')";
+				if(db.modifica(eliminarRelacion)){
+					insertarActividadesPatrocinador(pat);
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean controlUsuario(String nombre, String pwd) {
+		String consulta = "SELECT pwd FROM patrocinadores WHERE nombre='"+nombre+"'";
+		if(db.consulta(consulta)){
+			if(db.getString().equals(pwd)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

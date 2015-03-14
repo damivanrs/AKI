@@ -7,6 +7,7 @@ import marco.ControladorMarco;
 public class ControladorMenuSorteos {
 	private PantallaMenuSorteos pantalla;
 	private ControladorMarco marco;
+	Color sobre = new Color(0xFFBCFF);
 	
 	
 	public ControladorMenuSorteos(PantallaMenuSorteos pantalla) {
@@ -16,57 +17,55 @@ public class ControladorMenuSorteos {
 	}
 	
 	public void relax() {
-		pantalla.lSS.setBackground(Color.WHITE);
-		pantalla.lVS.setBackground(Color.WHITE);
-		pantalla.lMS.setBackground(Color.WHITE);
-		pantalla.lA.setBackground(Color.WHITE);
+		pantalla.pSS.setBackground(Color.WHITE);
+		pantalla.pVS.setBackground(Color.WHITE);
+		pantalla.pMS.setBackground(Color.WHITE);
+		pantalla.pA.setBackground(Color.WHITE);
 	}
 
 	public void solicitarSorteo() {
 		// TODO Auto-generated method stub
 		marco.anadirPantalla(new p0201SolicitarSorteo.PantallaSolicitarSorteo(marco));
-		
+		relax();		
 	}
 
 	public void verSorteos() {
 		// TODO Auto-generated method stub
 		//System.out.println("Pantalla Ver Sorteo");
 		marco.anadirPantalla(new p0202VerTodosSorteos.PantallaVerTodosSorteos(marco));
+		relax();
 	}
 
 	public void misSorteos() {
-		// TODO Auto-generated method stub
-		//System.out.println("Pantalla Mis Sorteos");
 		marco.anadirPantalla(new p0203MisSorteos.PantallaMisSorteos(marco));
+		relax();		
 	}
 
 	public void ayuda() {
-		// TODO Auto-generated method stub
 		marco.anadirPantalla(new p03Ayuda.PantallaAyuda(marco));
+		relax();
 	}
 
 	public void sobreSolicitarSorteo() {
 		// TODO Auto-generated method stub
 		relax();
-		pantalla.lSS.setBackground(Color.LIGHT_GRAY);
+		pantalla.pSS.setBackground(sobre);
 	}
 
 	public void sobreVerSorteo() {
 		// TODO Auto-generated method stub
 		relax();
-		pantalla.lVS.setBackground(Color.LIGHT_GRAY);
+		pantalla.pVS.setBackground(sobre);
 	}
 
 	public void sobreMisSorteos() {
-		// TODO Auto-generated method stub
 		relax();
-		pantalla.lMS.setBackground(Color.LIGHT_GRAY);
+		pantalla.pMS.setBackground(sobre);
 	}
 
 	public void sobreAyuda() {
-		// TODO Auto-generated method stub
 		relax();
-		pantalla.lA.setBackground(Color.LIGHT_GRAY);
+		pantalla.pA.setBackground(sobre);
 	}
 
 }

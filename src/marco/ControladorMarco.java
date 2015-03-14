@@ -2,6 +2,9 @@ package marco;
 
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
+import objetos.Patrocinador;
 import ddbb.GestorDDBB;
 import principal.PantallaPrincipal;
 import utiles.PanelPantalla;
@@ -20,6 +23,10 @@ public class ControladorMarco {
 		pantallas = new ArrayList<PanelPantalla>();
 		db = new GestorDDBB();
 		cargarInicio();
+	}
+	
+	public void setUsuario(String text) {
+		usuario=text;
 	}
 	
 	private void cargarInicio() {
@@ -106,7 +113,28 @@ public class ControladorMarco {
 	}
 
 	public void notificaciones() {
-		// TODO Auto-generated method stub
 		this.anadirPantalla(new p00Notificaciones.PantallaNotificaciones(this));
 	}
+
+	public Patrocinador getPatrocinador(String usuario) {
+		return db.getPatrocinador(usuario);
+	}
+
+	public Patrocinador getPatrocinador(String nombre, String pwd) {
+		return db.getPatrocinador(nombre, pwd);
+	}
+
+	public boolean anadirPatrocinador(Patrocinador pat) {
+		return db.anadirPatrocinador(pat);
+	}
+
+	public void dialogMensaje(String string) {
+		JOptionPane.showMessageDialog(vista,  string);
+	}
+
+	public boolean actualizarPatrocinador(Patrocinador pat) {
+		return db.actualizarPatrocinador(pat);
+	}
+
+	
 }
